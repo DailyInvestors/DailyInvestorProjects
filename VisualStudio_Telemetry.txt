@@ -49,3 +49,5 @@ none - Data does not require any special handling.
 OSS Codebase:
 https://github.com/microsoft/vscode/pull/34997
 
+vS Extension Authors:
+https://code.visualstudio.com/api/extension-guides/telemetry
