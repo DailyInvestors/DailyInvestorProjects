@@ -1,0 +1,300 @@
+Visual Studio on ChromeOS LInux
+
+Kernels:
+code --verbose --vmodule="*/components/os_crypt/*=1"
+
+You can manually tell VS Code which keyring to use by passing the password-store flag. Our recommended configuration is to first install gnome-keyring if you don't have it already and then launch VS Code with code --password-store="gnome-libsecret".
+
+If this solution works for you, you can persist the value of password-store by opening the Command Palette (⇧⌘P (Windows, Linux Ctrl+Shift+P)) and running the Preferences: Configure Runtime Arguments command. This will open the argv.json file where you can add the setting "password-store":"gnome-libsecret".
+
+Here are all the possible values of password-store if you would like to try using a different keyring than gnome-keyring:
+
+kwallet5: For use with kwalletmanager5.
+gnome-libsecret: For use with any package that implements the Secret Service API (for example gnome-keyring, kwallet5, KeepassXC).
+(not recommended) kwallet: For use with older versions of kwallet.
+(not recommended) basic: See the section below on basic text for more details.
+
+Visual Studio relies on Chromium's oscrypt module to discover and store encryption key information in the keyring. Chromium offers an opt-in fallback encryption strategy that uses an in-memory key based on a string that is hardcoded in the Chromium source. Because of this, this fallback strategy is, at best, obfuscation, and should only be used if you are accepting of the risk that any process on the system could, in theory, decrypt your stored secrets.
+
+If you accept this risk, you can set password-store to basic by opening the Command Palette (⇧⌘P (Windows, Linux Ctrl+Shift+P)) and running the Preferences: Configure Runtime Arguments command. This will open the argv.json file where you can add the setting "password-store":"basic".
+
+
+
+
+ Extensions: 
+Extensions view filters:
+@builtin - Show extensions that come with VS Code. Grouped by type (Programming Languages, Themes, etc.).
+@deprecated - Show deprecated extensions.
+@disabled - Show disabled installed extensions.
+@enabled - Show enabled installed extensions. Extensions can be individually enabled/disabled.
+@featured - Show featured extensions.
+@installed - Show installed extensions.
+@popular - Show popular extensions.
+@recentlyPublished - Show extensions that were recently published in the Marketplace.
+@recommended - Show recommended extensions. Grouped as Workspace specific or general use.
+@updates - Show outdated installed extensions. A newer version is available on the Marketplace.
+@workspaceUnsupported - Show extensions that are not supported for this workspace.
+@category - Show extensions belonging to specified category. Below are a few of supported categories. For a complete list, type @category and follow the options in the suggestion list:
+@category:themes
+@category:formatters
+@category:linters
+@category:snippets
+These filters can be combined as well. For example: Use @installed @category:themes to view all installed themes.
+
+
+Sorting:
+You can sort extensions with the @sort filter, which can take the following values:
+installs - Sort by Marketplace installation count, in descending order.
+name - Sort alphabetically by extension name.
+publishedDate - Sort by extension published date.
+rating - Sort by Marketplace rating (1-5 stars), in descending order.
+updateDate - Sort by extension last update name.
+
+
+Category && Tags
+You can filter on category and tag by using category: and tag:
+Supported categories are: [Azure, Data Science, Debuggers, Education, Extension Packs, Formatters, Keymaps, Language Packs, Linters, Machine Learning, Notebooks, Others, Programming Languages, SCM Providers, Snippets, Testing, Themes, Visualization]. They can be accessed through IntelliSense in the extensions search box.
+
+
+VSIX Files:
+You can manually install a VS Code extension packaged in a .vsix file. Using the Install from VSIX command in the Extensions view command dropdown, or the Extensions: Install from VSIX command in the Command Palette, point to the .vsix file.
+
+You can also install using the VS Code --install-extension command-line switch providing the path to the .vsix file.
+
+code --install-extension myextension.vsix
+Copy
+You may provide the --install-extension multiple times on the command line to install multiple extensions at once.
+
+
+Where are extensions installed?
+Extensions are installed in a per user extensions folder. Depending on your platform, the location is in the following folder:
+
+Windows %USERPROFILE%\.vscode\extensions
+macOS ~/.vscode/extensions
+Linux ~/.vscode/extensions
+You can change the location by launching VS Code with the --extensions-dir <dir> command-line option.
+
+~~~~~Profiles~~~~~~~
+
+Python Profile Template:
+The Python profile is a good starting point for Python development. It comes with Python specific snippets and has the following extensions:
+
+autoDocstring - Generate Python docstrings automatically.
+Container Tools - Create, manage, and debug containerized applications.
+Even Better TOML - Fully-featured TOML support for e.g. pyproject.toml files.
+Python - IntelliSense, environment management, debugging, refactoring.
+Python Environments - Manage Python environments and packages using your preferred environment manager.
+Remote Development extension pack - Supports SSH, WSL, and Dev Containers.
+Ruff - Integrates the Ruff Python linter and formatter.
+This profile also sets the following settings:
+
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.fixAll": ["source.unusedImports"],
+    "editor.defaultFormatter": "charliermarsh.ruff"
+
+
+
+Data Science Profile Template:
+The Data Science profile is a good starting point for all data and notebook work. It comes with specific snippets and has the following extensions:
+
+Data Wrangler - Data viewing, cleaning and preparation for tabular datasets and Excel/CSV/Parquet files.
+GitHub Copilot - Your AI pair programmer.
+Jupyter - Use Jupyter notebooks within VS Code.
+Python - IntelliSense, environment management, debugging, refactoring.
+Remote Development extension pack - Supports SSH, WSL, and Dev Containers.
+Ruff - Integrates the Ruff Python linter and formatter.
+This profile also sets the following settings:
+
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnType": true,
+        "editor.formatOnSave": true
+    },
+    "editor.inlineSuggest.enabled": true,
+    "editor.lineHeight": 17,
+    "breadcrumbs.enabled": false,
+    "files.autoSave": "afterDelay",
+    "notebook.output.scrolling": true,
+    "jupyter.themeMatplotlibPlots": true,
+    "jupyter.widgetScriptSources": [
+        "unpkg.com",
+        "jsdelivr.com"
+    ],
+    "files.exclude": {
+        "**/.csv": true,
+        "**/.parquet": true,
+        "**/.pkl": true,
+        "**/.xls": true
+    }
+
+
+
+
+Doc Writer Profile Template:
+The Doc Writer profile is a good lightweight setup for writing documentation. It comes with the following extensions:
+
+Code Spell Checker - Spelling checker for source code.
+Markdown Checkboxes - Adds checkbox support to the VS Code built-in Markdown Preview.
+Markdown Emoji - Adds emoji syntax support to Markdown Preview and notebook Markdown cells.
+Markdown Footnotes - Adds ^footnote syntax support to the Markdown Preview.
+Markdown Preview GitHub Styling - Use GitHub styling in the Markdown Preview.
+Markdown Preview Mermaid Support - Mermaid diagrams and flowcharts.
+Markdown yaml Preamble - Renders YAML front matter as a table.
+markdownlint - Markdown linting and style checking for Visual Studio Code.
+Word Count - View the number of words in a Markdown document in the Status Bar.
+Read Time - Estimate how long it takes to read your Markdown.
+This profile also sets the following settings:
+
+    "workbench.colorTheme": "Default Light Modern",
+    "editor.minimap.enabled": false,
+    "breadcrumbs.enabled": false,
+    "editor.glyphMargin": false,
+    "explorer.decorations.badges": false,
+    "explorer.decorations.colors": false,
+    "editor.fontLigatures": true,
+    "files.autoSave": "afterDelay",
+    "git.enableSmartCommit": true,
+    "window.commandCenter": true,
+    "editor.renderWhitespace": "none",
+    "workbench.editor.untitled.hint": "hidden",
+    "markdown.validate.enabled": true,
+    "markdown.updateLinksOnFileMove.enabled": "prompt",
+    "workbench.startupEditor": "none"
+
+
+
+
+
+Node.js Profile Template:
+The Node.js profile is a good starting point for all Node.js work. It comes with the following extensions:
+
+Container Tools - Create, manage, and debug containerized applications.
+Dev Containers - Create custom development environments inside a Docker container.
+DotENV - Support for dotenv file syntax.
+EditorConfig for VS Code - EditorConfig Support for Visual Studio Code.
+ESLint - Integrates ESLint JavaScript into VS Code.
+JavaScript (ES6) code snippets - Code snippets for JavaScript in ES6 syntax.
+Jest - Use Facebook's jest testing framework.
+Microsoft Edge Tools for VS Code - Use the Microsoft Edge Tools from within VS Code.
+npm Intellisense - Autocomplete npm modules in import statements.
+Prettier - Code formatter - Code formatter using Prettier.
+Rest Client - REST Client for Visual Studio Code.
+YAML - YAML language support with built-in Kubernetes syntax.
+This profile comes with the following settings:
+
+    "editor.formatOnPaste": true,
+    "git.autofetch": true,
+    "[markdown]":  {
+        "editor.wordWrap": "on"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+
+
+
+
+
+Angular Profile Template:
+The Angular profile is a good starting point for all Angular work. It comes with the following extensions:
+
+Angular Language Service - Editor services for Angular templates.
+Angular Schematics - Integrate Angular schematics (CLI commands).
+angular2-switcher - Easily navigate to typescript|template|style in angular2 project.
+Dev Containers - Create custom development environments inside a Docker container.
+EditorConfig for VS Code - EditorConfig Support for Visual Studio Code.
+ESLint - Integrates ESLint JavaScript into VS Code.
+JavaScript (ES6) code snippets - Code snippets for JavaScript in ES6 syntax.
+Jest - Use Facebook's jest testing framework.
+Material Icon Theme - Material Design Icons for Visual Studio Code.
+Microsoft Edge Tools for VS Code - Use the Microsoft Edge Tools from within VS Code.
+Playwright Test for VSCode - Run Playwright tests in Visual Studio Code.
+Prettier - Code formatter - Code formatter using Prettier.
+Rest Client - REST Client for Visual Studio Code.
+YAML - YAML language support with built-in Kubernetes syntax.
+This profile sets the following settings:
+
+    "editor.formatOnPaste": true,
+    "git.autofetch": true,
+    "[markdown]":  {
+        "editor.wordWrap": "on"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "workbench.iconTheme": "material-icon-theme"
+
+
+
+
+
+Java General Profile Template:
+The Java General profile is a good starting point for all Java work. It customizes the layout to improve the Java experience and comes with the following extensions from the Extension Pack for Java:
+
+Debugger for Java - A lightweight Java debugger.
+IntelliCode - AI-assisted development.
+IntelliCode API Usage Examples - Provides code examples for over 100K different APIs.
+Language Support for Java(TM) by Red Hat - Fundamental Java language support, Linting, Intellisense, formatting, refactoring.
+Maven for Java - Manage Maven projects and builds.
+Project Manager for Java - Manage Java projects within VS Code.
+Test Runner for Java - Run and debug JUnit or TestNG test cases.
+
+
+
+
+Java Spring Profile Template:
+The Java Spring profile is a good starting point for all Java and Spring developers. It builds on the Java General profile and add the following extensions from the Spring Boot Extension Pack:
+
+Spring Boot Dashboard - Provides Spring Boot live data visualization and observation in your running Spring applications.
+Spring Boot Tools - Rich language support for Spring Boot files.
+Spring Initializr Java Support - Scaffold and generate Spring Boot Java projects.
+This profile sets the following settings:
+
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "boot-java.rewrite.reconcile": true
+
+
+
+Command line:
+You can launch VS Code with a specific profile via the --profile command-line interface option. You pass the name of the profile after the --profile argument and open a folder or a workspace using that profile. The command line below opens the web-sample folder with the "Web Development" profile:
+
+code ~/projects/web-sample --profile "Web Development"
+
+If the profile specified does not exist, a new empty profile with the given name is created.
+
+
+
+
+Where are profiles kept?
+Profiles are stored under your User configurations similar to your user settings and keyboard shortcuts.
+
+Windows %APPDATA%\Code\User\profiles
+macOS $HOME/Library/Application\ Support/Code/User/profiles
+Linux $HOME/.config/Code/User/profiles
+If you are using the Insiders version, the intermediate folder name is Code - Insiders.
