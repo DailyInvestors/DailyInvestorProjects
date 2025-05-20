@@ -298,3 +298,7 @@ Windows %APPDATA%\Code\User\profiles
 macOS $HOME/Library/Application\ Support/Code/User/profiles
 Linux $HOME/.config/Code/User/profiles
 If you are using the Insiders version, the intermediate folder name is Code - Insiders.
+
+
+
+Note: Reference from Visual Studio Help Guides
